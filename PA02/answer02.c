@@ -213,16 +213,40 @@ const char *my_strstr(const char * s1, const char * s2)
 {
    	char str = 'a';
 	int var = 0;
-	int length = 0;
+	int var2 = 0;
+	int *check;
+	int length;
+	int pos;
 	
-	length = my_strlen(s1);
-    while (str != '\0' && var < num) 
+	length = my_strlen(s2);
+	while(str != '/0' && var2 != length)
 	{
-        str = s2[var];
-		s1[var + length] = str;
+		str = s1[var];
+		if(str == s2[var2])
+		{
+			var2++;
+		}
+		else
+		{
+			var2 = 0;
+		}
+		
 		var++;
-    }   	
-    return NULL;
+	}
+	
+	if(var2 == length)
+	{
+		pos = var - length;
+		check = &s1[pos];
+	}
+	
+	else
+	{
+		check = NULL;
+	}
+		
+	
+    return check;
 }
 
 
@@ -255,7 +279,15 @@ const char *my_strstr(const char * s1, const char * s2)
  */
 void my_strinsert(char *s1, const char *s2, int pos)
 {
-  
+  	char str = 'a';
+	int var = 0;
+
+    while (str != '\0') 
+	{
+        str = s2[var];
+		s1[var] = str;
+		var++;
+    }
 }
 
 /**
