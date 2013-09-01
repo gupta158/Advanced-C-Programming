@@ -1,4 +1,3 @@
-
 #include "pa02.h"
 
 /**
@@ -8,8 +7,19 @@
  * Example: my_strlen("foo") should yield 3.
  */
 int my_strlen(const char * s)
-{
-    return 0;
+{	
+	char str = 'a';
+	int length = 0;
+	int var = 0;
+
+    while (str != '\0') 
+	{
+        str = s[var];
+		var++;
+        length++;
+    }
+	
+    return length - 1;
 }
 
 /**
@@ -20,7 +30,22 @@ int my_strlen(const char * s)
  */
 int my_countchar(const char * s, char c)
 {
-    return 0;
+	char str = 'a';
+	int count = 0;
+	int var = 0;
+	
+    while (str != '\0') 
+	{
+        str = s[var];
+		if(str == c)
+		{
+			count++;
+		}
+		var++;
+    }
+	
+    return count;
+
 }
 
 /**
@@ -34,6 +59,20 @@ int my_countchar(const char * s, char c)
  */
 void my_strupper(char * s)
 {
+	char str = 'a';
+	int count = 0;
+	int var = 0;
+	
+    while (str != '\0') 
+	{
+        str = s[var];
+		if(str <= 122 && str >= 97)
+		{
+			str = str - 32;
+			s[var] = str;
+		}
+		var++;
+    }	
 
 }
 
@@ -48,7 +87,20 @@ void my_strupper(char * s)
  */
 void my_strlower(char * s)
 {
-
+	char str = 'a';
+	int count = 0;
+	int var = 0;
+	
+    while (str != '\0') 
+	{
+        str = s[var];
+		if(str <= 90 && str >= 65)
+		{
+			str = str + 32;
+			s[var] = str;
+		}
+		var++;
+    }
 }
 
 /**
@@ -63,7 +115,16 @@ void my_strlower(char * s)
  */
 void my_strcpy(char * s1, const char * s2)
 {
-
+	char str = 'a';
+	int count = 0;
+	int var = 0;
+	
+    while (str != '\0') 
+	{
+        str = s2[var];
+		s1[var] = str;
+		var++;
+    }
 }
 
 /**
@@ -78,7 +139,16 @@ void my_strcpy(char * s1, const char * s2)
  */
 void my_strncpy(char * s1, const char * s2, int num)
 {
-    
+   	char str = 'a';
+	int count = 0;
+	int var = 0;
+	
+    while (str != '\0' && var < num) 
+	{
+        str = s2[var];
+		s1[var] = str;
+		var++;
+    }
 }
 
 
@@ -187,6 +257,9 @@ void my_strinsert(char *s1, const char *s2, int pos)
  * 
  * Example(3): char foo[10] = "foobar";
  * my_strdelete(foo, 0, 34) yields "".
+ * 
+ * Example(4): char foo[10] = "foobar";
+ * my_strdelete(foo, 2, 30) yields "fo";
  */
 void my_strdelete(char *s, int pos, int length)
 {
