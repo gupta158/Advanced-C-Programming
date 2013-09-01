@@ -60,7 +60,6 @@ int my_countchar(const char * s, char c)
 void my_strupper(char * s)
 {
 	char str = 'a';
-	int count = 0;
 	int var = 0;
 	
     while (str != '\0') 
@@ -88,7 +87,6 @@ void my_strupper(char * s)
 void my_strlower(char * s)
 {
 	char str = 'a';
-	int count = 0;
 	int var = 0;
 	
     while (str != '\0') 
@@ -116,15 +114,15 @@ void my_strlower(char * s)
 void my_strcpy(char * s1, const char * s2)
 {
 	char str = 'a';
-	int count = 0;
 	int var = 0;
-	
+
     while (str != '\0') 
 	{
         str = s2[var];
 		s1[var] = str;
 		var++;
     }
+	
 }
 
 /**
@@ -140,15 +138,15 @@ void my_strcpy(char * s1, const char * s2)
 void my_strncpy(char * s1, const char * s2, int num)
 {
    	char str = 'a';
-	int count = 0;
 	int var = 0;
-	
-    while (str != '\0' && var < num) 
+	s1[num] = '\0';
+    while ((str != '\0') && (var < num)) 
 	{
         str = s2[var];
 		s1[var] = str;
 		var++;
     }
+
 }
 
 
@@ -163,7 +161,18 @@ void my_strncpy(char * s1, const char * s2, int num)
  */
 void my_strcat(char * s1, const char * s2) 
 {
-    
+   
+	char str = 'a';
+	int var = 0;
+	int length = 0;
+	
+	length = my_strlen(s1);
+    while (str != '\0') 
+	{
+        str = s2[var];
+		s1[var + length] = str;
+		var++;
+    }   
 }
 
 /** 
@@ -177,7 +186,17 @@ void my_strcat(char * s1, const char * s2)
  */
 void my_strncat(char * s1, const char * s2, int num)
 {
-   
+   	char str = 'a';
+	int var = 0;
+	int length = 0;
+	
+	length = my_strlen(s1);
+    while (str != '\0' && var < num) 
+	{
+        str = s2[var];
+		s1[var + length] = str;
+		var++;
+    }   
 }
 
 /**
@@ -192,6 +211,17 @@ void my_strncat(char * s1, const char * s2, int num)
 
 const char *my_strstr(const char * s1, const char * s2)
 {
+   	char str = 'a';
+	int var = 0;
+	int length = 0;
+	
+	length = my_strlen(s1);
+    while (str != '\0' && var < num) 
+	{
+        str = s2[var];
+		s1[var + length] = str;
+		var++;
+    }   	
     return NULL;
 }
 
