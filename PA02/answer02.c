@@ -281,13 +281,36 @@ void my_strinsert(char *s1, const char *s2, int pos)
 {
   	char str = 'a';
 	int var = 0;
-
-    while (str != '\0') 
+	int length;
+	
+	length = my_strlen(s2);
+	if(pos < length)
 	{
-        str = s2[var];
-		s1[var] = str;
-		var++;
-    }
+		while(var < length)
+		{
+			s1[var + length] = s1[var];
+			var++;
+		}
+		
+		var = 0;
+		for(var = 0; var < length; var++)
+		{
+			str = s2[var];
+			s1[var] = str;
+			
+		}
+	}
+	
+	else
+	{
+		for(var = 0; var < length; var++) 
+		{
+			str = s2[var];
+			s1[pos + var] = str;
+			
+		}
+	}
+	
 }
 
 /**
