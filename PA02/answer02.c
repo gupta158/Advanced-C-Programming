@@ -214,12 +214,11 @@ const char *my_strstr(const char * s1, const char * s2)
    	char str = 'a';
 	int var = 0;
 	int var2 = 0;
-	int *check;
 	int length;
 	int pos;
 	
 	length = my_strlen(s2);
-	while(str != '/0' && var2 != length)
+	while(str != '\0' && var2 != length)
 	{
 		str = s1[var];
 		if(str == s2[var2])
@@ -237,16 +236,10 @@ const char *my_strstr(const char * s1, const char * s2)
 	if(var2 == length)
 	{
 		pos = var - length;
-		check = &s1[pos];
+		return &s1[pos];
 	}
 	
-	else
-	{
-		check = NULL;
-	}
-		
-	
-    return check;
+    return NULL;
 }
 
 
@@ -281,35 +274,68 @@ void my_strinsert(char *s1, const char *s2, int pos)
 {
   	char str = 'a';
 	int var = 0;
-	int length;
+	int length1;
+	int length2;
 	
-	length = my_strlen(s2);
-	if(pos < length)
+	length2 = my_strlen(s2);
+	length1 = my_strlen(s1);
+	
+	if(pos < length1)
 	{
-		while(var < length)
+		var = length1 ;
+		while (var >= 0)
 		{
-			s1[var + length] = s1[var];
-			var++;
+			str = s1[var];
+			s1[var+length2] = str;
+			var--;
 		}
-		
+		//s1[length1+length2] = '/0';
 		var = 0;
-		for(var = 0; var < length; var++)
+		while (var < length2) 
 		{
 			str = s2[var];
 			s1[var] = str;
-			
+			var++;
 		}
 	}
 	
 	else
 	{
-		for(var = 0; var < length; var++) 
+		while (var <= length2) 
 		{
 			str = s2[var];
-			s1[pos + var] = str;
-			
+			s1[pos+var] = str;
+			var++;
 		}
-	}
+		// s1[var] = '/0';
+		
+	}	
+	// if(pos < length)
+	// {
+		// while(var < length)
+		// {
+			// s1[var + length] = s1[var];
+			// var++;
+		// }
+		// var = 0;
+
+		// while (str != '\0') 
+		// {
+			// str = s2[var];
+			// s1[var] = str;
+			// var++;
+		// }
+	// }
+	
+	// else
+	// {
+		// while (str != '\0') 
+		// {
+			// str = s2[var];
+			// s1[pos + var] = str;
+			// var++;
+		// }
+	// }
 	
 }
 
@@ -348,6 +374,26 @@ void my_strinsert(char *s1, const char *s2, int pos)
  */
 void my_strdelete(char *s, int pos, int length)
 {
-  
+	int var = 0;
+	int length2;
+	char str = 'a';
+		
+	length2 = my_strlen(s);
+	if(length > (pos + length2))
+	{
+		s[pos] = '\0';
+	}
+	
+	else
+	{
+		while(str != '\0')
+		{
+			s[pos + var] = s[pos + length + var];
+			str = s[pos+var];
+			var++;
+		}	
+	}
+	
+
 }
 
