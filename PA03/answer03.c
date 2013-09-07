@@ -62,7 +62,37 @@
 
 int * readIntegers(const char * filename, int * numberOfIntegers)
 {
-    return NULL;
+	int count = 0;
+	int number = 0;
+	int num = 0;
+	FILE* fh;
+	
+	
+	fh = fopen("input0","r"); 
+	if(fh == NULL)
+	{
+		return NULL;
+	}
+	else
+	{
+		while(fscanf(fh, "%d", &number) == 1)
+		{
+			count++;
+		}
+
+		int * array = malloc(sizeof(int) * count);
+		fseek(fh, 0, SEEK_SET );
+		while(fscanf(fh, "%d", &number) == 1)
+		{
+			array[num] = number;
+			num++;
+		}
+		fclose(fh);
+		*numberOfIntegers = count;
+		return &(array[0]);
+	}
+
+        
 }
 
 /**
