@@ -68,7 +68,7 @@ int * readIntegers(const char * filename, int * numberOfIntegers)
 	FILE* fh;
 	
 	
-	fh = fopen("input0","r"); 
+	fh = fopen(filename,"r"); 
 	if(fh == NULL)
 	{
 		return NULL;
@@ -134,7 +134,48 @@ int * readIntegers(const char * filename, int * numberOfIntegers)
  */
 void sort(int * arr, int length)
 {
-    
+	int num = 0;
+	int number;
+	
+	for(num = 0; num < length; num++)
+	{
+		number = arr[num];
+		quicksort(arr, num);
+	}
+}
+
+void quicksort(int * arr, int num)
+{
+	int number;
+	int higher = 0;
+	int lower = 0;
+	
+	number = arr[num];	
+	for(--num; num >= 0; num--)
+	{
+		if(arr[num] > number)
+		{
+			higher++;
+		}
+		else
+		{
+			lower++;
+		}	
+	}
+	
+	for(++num; num >= 0; num++)
+	{
+		if(arr[num] > number)
+		{
+			higher++;
+		}
+		else
+		{
+			lower++;
+		}	
+	}
+	
+	
 }
 
 /**
