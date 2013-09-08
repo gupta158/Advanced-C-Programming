@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void quicksort(int *, int, int, int);
+void exchange(int *, int, int);
+int binary_search(int *, int, int, int)
 /**
  * Read a file of integers.
  *
@@ -135,10 +138,12 @@ int * readIntegers(const char * filename, int * numberOfIntegers)
 void sort(int * arr, int length)
 {
 	int num = 0;
+	int min = 0;
 	// int number;
 	
 	num = length / 2;
-	quicksort(arr, num, length, 0);
+	
+	quicksort(arr, num, length, min);
 
 }
 
@@ -151,7 +156,11 @@ void quicksort(int * arr, int num, int max, int min)
 	int var; 
 	// int var2 = 0;
 	int var3 = 0;
-	
+
+	if(max < 1)
+	{
+		return 0;
+	}
 	var = num;
 	number = arr[num];	
 	
@@ -185,16 +194,17 @@ void quicksort(int * arr, int num, int max, int min)
 	{
 		if(arr[var] < number)
 		{
-			exchange(arr, num, var3);
+			exchange(arr, var, var3);
 			var3++;
 		}
 	}
 	
 	quicksort(arr, num, lower - 1, 0);
 		
+	return 0;
 }
 
-void exchange(int *arr, int num1, int num2)
+void exchange(int * arr, int num1, int num2)
 {
 	int temp;
 	
@@ -249,7 +259,31 @@ void exchange(int *arr, int num1, int num2)
  */
 int search(int * arr, int length, int key)
 {
+	int num;
+	int num2;
+	int first = 0;
+	int last = length - 1;
+	int middle = (first + length) / 2;
+	
+	binary_search(arr, key, first, last)
+		
     return -1;
 }
+
+int binary_search(int * arr, int key, int first, int length)
+{
+	
+	if(key > arr[middle])
+	{
+		first = middle + 1;
+	}
+	else if (key == arr[middle]
+	{
+		return middle;
+	}
+	else	
+	{
+		last = middle - 1;
+	}
 
 
