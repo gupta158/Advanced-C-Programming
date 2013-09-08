@@ -135,25 +135,29 @@ int * readIntegers(const char * filename, int * numberOfIntegers)
 void sort(int * arr, int length)
 {
 	int num = 0;
-	int number;
+	// int number;
 	
-	for(num = 0; num < length; num++)
-	{
-		number = arr[num];
-		quicksort(arr, num);
-	}
+	num = length / 2;
+	quicksort(arr, num, length, 0);
+
 }
 
-void quicksort(int * arr, int num)
+void quicksort(int * arr, int num, int max, int min)
 {
 	int number;
 	int higher = 0;
 	int lower = 0;
+	// int temp;
+	int var; 
+	// int var2 = 0;
+	int var3 = 0;
 	
+	var = num;
 	number = arr[num];	
-	for(--num; num >= 0; num--)
+	
+	for(--var; var >= min; var--)
 	{
-		if(arr[num] > number)
+		if(arr[var] > number)
 		{
 			higher++;
 		}
@@ -163,9 +167,10 @@ void quicksort(int * arr, int num)
 		}	
 	}
 	
-	for(++num; num >= 0; num++)
+	var = num;
+	for(++var; var < max; var++)
 	{
-		if(arr[num] > number)
+		if(arr[var] > number)
 		{
 			higher++;
 		}
@@ -175,9 +180,29 @@ void quicksort(int * arr, int num)
 		}	
 	}
 	
+	exchange(arr, num, lower);
+	for(var = 0; var < max; var++)
+	{
+		if(arr[var] < number)
+		{
+			exchange(arr, num, var3);
+			var3++;
+		}
+	}
 	
+	quicksort(arr, num, lower - 1, 0);
+		
 }
 
+void exchange(int *arr, int num1, int num2)
+{
+	int temp;
+	
+	temp = arr[num1];
+	arr[num1] = arr[num2];
+	arr[num2] = temp;
+	
+}
 /**
  * Use binary search to find 'key' in a sorted array of integers
  *
