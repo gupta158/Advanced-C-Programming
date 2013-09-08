@@ -5,7 +5,7 @@
 
 void quicksort(int *, int, int, int);
 void exchange(int *, int, int);
-int binary_search(int *, int, int, int)
+int binary_search(int *, int, int, int);
 /**
  * Read a file of integers.
  *
@@ -159,7 +159,7 @@ void quicksort(int * arr, int num, int max, int min)
 
 	if(max < 1)
 	{
-		return 0;
+		return;
 	}
 	var = num;
 	number = arr[num];	
@@ -199,7 +199,7 @@ void quicksort(int * arr, int num, int max, int min)
 		}
 	}
 	
-	quicksort(arr, num, lower - 1, 0);
+	// quicksort(arr, num, lower - 1, 0);
 		
 	return 0;
 }
@@ -259,25 +259,25 @@ void exchange(int * arr, int num1, int num2)
  */
 int search(int * arr, int length, int key)
 {
-	int num;
-	int num2;
 	int first = 0;
 	int last = length - 1;
-	int middle = (first + length) / 2;
+	int result;
 	
-	binary_search(arr, key, first, last)
+	result = binary_search(arr, key, first, last);
 		
-    return -1;
+    return result;
 }
 
-int binary_search(int * arr, int key, int first, int length)
+int binary_search(int * arr, int key, int first, int last)
 {
+	int middle = (first + last) / 2;
+	int num;
 	
 	if(key > arr[middle])
 	{
 		first = middle + 1;
 	}
-	else if (key == arr[middle]
+	else if (key == arr[middle])
 	{
 		return middle;
 	}
@@ -285,5 +285,11 @@ int binary_search(int * arr, int key, int first, int length)
 	{
 		last = middle - 1;
 	}
+	
+	if(last < first)
+	{
+		return -1;
+	}
 
-
+	num = binary_search(arr, key, first, last);
+}
