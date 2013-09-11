@@ -70,7 +70,7 @@ int * readIntegers(const char * filename, int * numberOfIntegers)
 	int num = 0;
 	FILE* fh;
 	
-	
+	//Opened file
 	fh = fopen(filename,"r"); 
 	if(fh == NULL)
 	{
@@ -78,14 +78,16 @@ int * readIntegers(const char * filename, int * numberOfIntegers)
 	}
 	else
 	{
+		//Counting the number of values
 		while(fscanf(fh, "%d", &number) == 1)
 		{
 			count++;
 		}
-	
+		//Allocating memory to the array
 		int * array = malloc(sizeof(int) * count);
-		
+		//Going back to the start
 		fseek(fh, 0, SEEK_SET );
+		//Transfering values to array
 		while(fscanf(fh, "%d", &number) == 1)
 		{
 			array[num] = number;
@@ -139,12 +141,8 @@ int * readIntegers(const char * filename, int * numberOfIntegers)
  */
 void sort(int * arr, int length)
 {
-	int num = 0;
 	int min = 0;
-	// int number;
-	
-	num = length / 2;
-	
+
 	quicksort(arr, length, min, length);
 
 }
@@ -154,32 +152,20 @@ void quicksort(int * arr, int max, int min, int length)
 	int number;
 	int higher = 0;
 	int lower = min;
-	// int temp;
 	int var; 
-	// int var2 = 0;
 	int var3 = min;
 	int num;
 
+	//Breaks once it breaks some parameters
 	num = min;
-	if((max < 1) || (min >= max) || (max >length) )
+	if((max < 1) || (min >= max) || (max > length))
 	{
 		return;
 	}
-	//var = num;
+
 	number = arr[num];	
 	
-	// for(--var; var >= min; var--)
-	// {
-		// if(arr[var] > number)
-		// {
-			// higher++;
-		// }
-		// else
-		// {
-			// lower++;
-		// }	
-	// }
-	
+	//Counts number of variables greater than the number and the number smaller
 	var = num;
 	for(++var; var < max; var++)
 	{
@@ -192,9 +178,10 @@ void quicksort(int * arr, int max, int min, int length)
 			higher++;
 		}	
 	}
-	
+	//Moves the number to the point where the lower numbers end
 	exchange(arr, num, lower);
 	num = lower;
+	//Moves all smaller numbers to the left
 	for(var = min; var < max; var++)
 	{
 		if(arr[var] < number)
@@ -203,6 +190,7 @@ void quicksort(int * arr, int max, int min, int length)
 			var3++;
 		}
 	}
+	//Recursive call, for the second half of the values, if lower is min, min value is increased
 	if(lower == min)
 	{
 		quicksort(arr, num + higher + 1, num + 1, length);
@@ -211,6 +199,7 @@ void quicksort(int * arr, int max, int min, int length)
 	{
 		quicksort(arr, num + higher + 1, num, length);
 	}
+	//Recursive call, for the first half of the values, if higher is 0, max value is decreased
 	if(higher == 0)
 	{
 		quicksort(arr, num , min, length);
@@ -219,12 +208,11 @@ void quicksort(int * arr, int max, int min, int length)
 	{
 		quicksort(arr, num, min, length);
 	}
-	
-	
-	
+		
 	return;
 }
 
+//Exchanges values in an array when called
 void exchange(int * arr, int num1, int num2)
 {
 	int temp;
@@ -291,29 +279,33 @@ int search(int * arr, int length, int key)
 
 int binary_search(int * arr, int key, int first, int last)
 {
+	//If last is smaller than first, that means key doesnt exist
 	if(last < first)
 	{
 		return -1;
 	}	
 	
+	//Finds the middle value
 	int middle = (first + last) / 2;
 	int num;
 
-
+	//If key is bigger than the middle value, then first value is made to be the value ahead of middle
 	if(key > arr[middle])
 	{
 		first = middle + 1;
 	}
+	//If key is the middle value, function ends
 	else if (key == arr[middle])
 	{
 		return middle;
 	}
+	//If key is smaller than middle value, second half of array is discarded, same logic as above
 	else	
 	{
 		last = middle - 1;
 	}
 	
-
+	//Recursive call until num gets a value
 	num = binary_search(arr, key, first, last);
 	
 	return num ;
