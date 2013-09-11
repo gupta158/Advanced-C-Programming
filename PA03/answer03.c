@@ -82,14 +82,16 @@ int * readIntegers(const char * filename, int * numberOfIntegers)
 		{
 			count++;
 		}
-
+	
 		int * array = malloc(sizeof(int) * count);
+		
 		fseek(fh, 0, SEEK_SET );
 		while(fscanf(fh, "%d", &number) == 1)
 		{
 			array[num] = number;
 			num++;
 		}
+		
 		fclose(fh);
 		*numberOfIntegers = count;
 		return &(array[0]);
@@ -143,54 +145,57 @@ void sort(int * arr, int length)
 	
 	num = length / 2;
 	
-	quicksort(arr, num, length, min);
+	quicksort(arr, length, min, length);
 
 }
 
-void quicksort(int * arr, int num, int max, int min)
+void quicksort(int * arr, int max, int min, int length)
 {
 	int number;
 	int higher = 0;
-	int lower = 0;
+	int lower = min;
 	// int temp;
 	int var; 
 	// int var2 = 0;
-	int var3 = 0;
+	int var3 = min;
+	int num;
 
-	if(max < 1)
+	num = min;
+	if((max < 1) || (min >= max) || (max >length) )
 	{
 		return;
 	}
-	var = num;
+	//var = num;
 	number = arr[num];	
 	
-	for(--var; var >= min; var--)
-	{
-		if(arr[var] > number)
-		{
-			higher++;
-		}
-		else
-		{
-			lower++;
-		}	
-	}
+	// for(--var; var >= min; var--)
+	// {
+		// if(arr[var] > number)
+		// {
+			// higher++;
+		// }
+		// else
+		// {
+			// lower++;
+		// }	
+	// }
 	
 	var = num;
 	for(++var; var < max; var++)
 	{
-		if(arr[var] > number)
+		if(arr[var] < number)
 		{
-			higher++;
+			lower++;
 		}
 		else
 		{
-			lower++;
+			higher++;
 		}	
 	}
 	
 	exchange(arr, num, lower);
-	for(var = 0; var < max; var++)
+	num = lower;
+	for(var = min; var < max; var++)
 	{
 		if(arr[var] < number)
 		{
@@ -198,10 +203,26 @@ void quicksort(int * arr, int num, int max, int min)
 			var3++;
 		}
 	}
+	if(lower == min)
+	{
+		quicksort(arr, num + higher + 1, num + 1, length);
+	}
+	else
+	{
+		quicksort(arr, num + higher + 1, num, length);
+	}
+	if(higher == 0)
+	{
+		quicksort(arr, num , min, length);
+	}
+	else
+	{
+		quicksort(arr, num, min, length);
+	}
 	
-	// quicksort(arr, num, lower - 1, 0);
-		
-	return 0;
+	
+	
+	return;
 }
 
 void exchange(int * arr, int num1, int num2)
@@ -270,9 +291,15 @@ int search(int * arr, int length, int key)
 
 int binary_search(int * arr, int key, int first, int last)
 {
+	if(last < first)
+	{
+		return -1;
+	}	
+	
 	int middle = (first + last) / 2;
 	int num;
-	
+
+
 	if(key > arr[middle])
 	{
 		first = middle + 1;
@@ -286,10 +313,8 @@ int binary_search(int * arr, int key, int first, int last)
 		last = middle - 1;
 	}
 	
-	if(last < first)
-	{
-		return -1;
-	}
 
 	num = binary_search(arr, key, first, last);
+	
+	return num ;
 }
