@@ -15,9 +15,9 @@
 #include "pa04.h"
 #include <stdio.h>
 #include <stdlib.h>
-
-
-
+#define SIZE 100
+void partitions1(int *, int, int);
+void print(int *);
 /*
  * =================================================================
  * This function prints all partitions of a positive integer value
@@ -33,8 +33,48 @@
 
 void partitionAll(int value)
 {
-  printf("partitionAll %d\n", value);
+	printf("partitionAll %d\n", value);
+	int ind = 0;
+	int ind2 = 0;
+	int val = 0;
+	int iter = 0;
+	int * arr = malloc(sizeof(int) * SIZE);
+	partitions1(arr, value, 1);
+	return;
   
+}
+
+void partitions1(int * arr, int val, int num)
+{
+	int ind1 = 0;
+	int ind2 = 0;
+	int iter = 0;
+	ind1 = val / num;
+	for(iter = 0; iter < ind1; iter++)
+	{
+		arr[iter] = num;
+	}
+	print(arr);
+	
+}
+
+void print(int *arr)
+{
+	int num = 0;
+	printf(" =");
+	while(arr[num] != 0)
+	{
+		printf(" %d ", arr[num]);
+		
+		num++;
+		if(arr[num] != 0)
+		{
+			printf("+");
+		}
+	}
+	printf("\n");
+	
+	return;
 }
 /*
  * =================================================================
