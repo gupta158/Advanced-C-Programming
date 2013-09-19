@@ -17,6 +17,8 @@
 #include <stdlib.h>
 #define SIZE 100
 void partitionworker(int *, int, int);
+void partitionworker2(int *, int, int);
+void partitionworker3(int *, int, int);
 void print(int *, int);
 /*
  * =================================================================
@@ -55,7 +57,7 @@ void partitionworker(int * arr, int pos, int n)
 	for(i = 1; i <= n; ++i)
 	{
 		arr[pos] = i;
-		partitionworker(arr, pos + 1, n-i);
+		partitionworker(arr, pos + 1, n - i);
 	}
 	
 	return;
@@ -100,7 +102,40 @@ void print (int * arr, int len)
 void partitionIncreasing(int value)
 {
 	printf("partitionIncreasing %d\n", value);
+	// int ind = 0;
+	// int ind2 = 0;
+	// int val = 0;
+	// int iter = 0;
+	int * arr = malloc(sizeof(int) * value);
+	partitionworker2(arr, 0, value);
 	
+	free(arr);
+	return;
+}
+
+void partitionworker2(int * arr, int pos, int n)
+{
+	if(n <= 0)
+	{
+		print(arr, pos);
+		return;
+	}
+	int i;
+	for(i = 1; i <= n; ++i)
+	{
+		if(pos == 0)
+		{
+			arr[pos] = i;
+			partitionworker2(arr, pos + 1, n - i);
+		}
+		else if(i > arr[pos - 1])
+		{
+			arr[pos] = i;
+			partitionworker2(arr, pos + 1, n - i);	
+		}
+	}
+	
+	return;
 }
 
 /*
@@ -126,10 +161,41 @@ void partitionIncreasing(int value)
 void partitionDecreasing(int value)
 {
   printf("partitionDecreasing %d\n", value);
-  
-
+	// int ind = 0;
+	// int ind2 = 0;
+	// int val = 0;
+	// int iter = 0;
+	int * arr = malloc(sizeof(int) * value);
+	partitionworker3(arr, 0, value);
+	
+	free(arr);
+	return;
 }
 
+void partitionworker3(int * arr, int pos, int n)
+{
+	if(n <= 0)
+	{
+		print(arr, pos);
+		return;
+	}
+	int i;
+	for(i = 1; i <= n; ++i)
+	{
+		if(pos == 0)
+		{
+			arr[pos] = i;
+			partitionworker3(arr, pos + 1, n - i);
+		}
+		else if(i < arr[pos - 1])
+		{
+			arr[pos] = i;
+			partitionworker3(arr, pos + 1, n - i);	
+		}
+	}
+	
+	return;
+}
 /*
  * =================================================================
  * This function prints odd number only partitions of a positive integer value
