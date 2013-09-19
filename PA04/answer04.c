@@ -21,6 +21,7 @@ void partitionworker2(int *, int, int);
 void partitionworker3(int *, int, int);
 void partitionworker4(int *, int, int);
 void partitionworker5(int *, int, int);
+void partitionworker7(int *, int, int);
 void print(int *, int);
 /*
  * =================================================================
@@ -344,4 +345,44 @@ void partitionPrime(int value)
 {
   printf("partitionPrime %d\n", value);
 
+
+	int * arr = malloc(sizeof(int) * value);
+	partitionworker7(arr, 0, value);
+	
+	free(arr);
+	return;
+}
+
+void partitionworker7(int * arr, int pos, int n)
+{	
+	int check = 1;
+	int ind;
+	if(n <= 0)
+	{
+		print(arr, pos);
+		return;
+	}
+	int i;
+	for(i = 1; i <= n; ++i)
+	{
+		check = 1;
+		for(ind = 2; ind < i; ++ind)
+		{
+			if(i % ind == 0)
+			{
+				check = 0;
+			}
+		}
+		if(i == 1)
+		{
+			check = 0;
+		}
+		if(check == 1)
+		{
+			arr[pos] = i;
+			partitionworker7(arr, pos + 1, n - i);	
+		}
+	}
+	
+	return;
 }
