@@ -16,8 +16,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define SIZE 100
-void partitions1(int *, int, int);
-void print(int *);
+void partitionworker(int *, int, int);
+void print(int *, int);
 /*
  * =================================================================
  * This function prints all partitions of a positive integer value
@@ -30,50 +30,51 @@ void print(int *);
  * = 3
  */
 
-
 void partitionAll(int value)
 {
 	printf("partitionAll %d\n", value);
-	int ind = 0;
-	int ind2 = 0;
-	int val = 0;
-	int iter = 0;
-	int * arr = malloc(sizeof(int) * SIZE);
-	partitions1(arr, value, 1);
+	// int ind = 0;
+	// int ind2 = 0;
+	// int val = 0;
+	// int iter = 0;
+	int * arr = malloc(sizeof(int) * value);
+	partitionworker(arr, 0, value);
+	
+	free(arr);
 	return;
-  
 }
 
-void partitions1(int * arr, int val, int num)
+void partitionworker(int * arr, int pos, int n)
 {
-	int ind1 = 0;
-	int ind2 = 0;
-	int iter = 0;
-	ind1 = val / num;
-	for(iter = 0; iter < ind1; iter++)
+	if(n <= 0)
 	{
-		arr[iter] = num;
+		print(arr, pos);
+		return;
 	}
-	print(arr);
+	int i;
+	for(i = 1; i <= n; ++i)
+	{
+		arr[pos] = i;
+		partitionworker(arr, pos + 1, n-i);
+	}
 	
+	return;
 }
 
-void print(int *arr)
+
+
+void print (int * arr, int len)
 {
-	int num = 0;
-	printf(" =");
-	while(arr[num] != 0)
+	int i;
+	if(len > 0)
 	{
-		printf(" %d ", arr[num]);
-		
-		num++;
-		if(arr[num] != 0)
-		{
-			printf("+");
-		}
+		printf("= %d", arr[0]);
 	}
-	printf("\n");
-	
+	for(i = 1; i < len; ++i)
+	{
+		printf(" + %d", arr[i]);
+	}
+		printf("\n");
 	return;
 }
 /*
@@ -98,8 +99,8 @@ void print(int *arr)
 
 void partitionIncreasing(int value)
 {
-  printf("partitionIncreasing %d\n", value);
-
+	printf("partitionIncreasing %d\n", value);
+	
 }
 
 /*
