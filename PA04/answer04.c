@@ -19,6 +19,8 @@
 void partitionworker(int *, int, int);
 void partitionworker2(int *, int, int);
 void partitionworker3(int *, int, int);
+void partitionworker4(int *, int, int);
+void partitionworker5(int *, int, int);
 void print(int *, int);
 /*
  * =================================================================
@@ -218,6 +220,31 @@ void partitionOdd(int value)
 {
   printf("partitionOdd %d\n", value);
   
+	int * arr = malloc(sizeof(int) * value);
+	partitionworker4(arr, 0, value);
+	
+	free(arr);
+	return;
+}
+
+void partitionworker4(int * arr, int pos, int n)
+{
+	if(n <= 0)
+	{
+		print(arr, pos);
+		return;
+	}
+	int i;
+	for(i = 1; i <= n; ++i)
+	{
+		if(i % 2 == 1)
+		{
+			arr[pos] = i;
+			partitionworker4(arr, pos + 1, n - i);	
+		}
+	}
+	
+	return;
 }
 
 /*
@@ -243,6 +270,31 @@ void partitionEven(int value)
 {
   printf("partitionEven %d\n", value);
 
+	int * arr = malloc(sizeof(int) * value);
+	partitionworker5(arr, 0, value);
+	
+	free(arr);
+	return;
+}
+
+void partitionworker5(int * arr, int pos, int n)
+{
+	if(n <= 0)
+	{
+		print(arr, pos);
+		return;
+	}
+	int i;
+	for(i = 1; i <= n; ++i)
+	{
+		if(i % 2 == 0)
+		{
+			arr[pos] = i;
+			partitionworker5(arr, pos + 1, n - i);	
+		}
+	}
+	
+	return;
 }
 
 /*
