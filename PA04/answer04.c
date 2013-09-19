@@ -21,6 +21,7 @@ void partitionworker2(int *, int, int);
 void partitionworker3(int *, int, int);
 void partitionworker4(int *, int, int);
 void partitionworker5(int *, int, int);
+void partitionworker6(int *, int, int);
 void partitionworker7(int *, int, int);
 void print(int *, int);
 /*
@@ -321,8 +322,55 @@ void partitionOddAndEven(int value)
 {
   printf("partitionOddAndEven %d\n", value);
   
+	int * arr = malloc(sizeof(int) * value);
+	partitionworker6(arr, 0, value);
+	
+	free(arr);
+	return;
 }
 
+void partitionworker6(int * arr, int pos, int n)
+{
+	if(n <= 0)
+	{
+		print(arr, pos);
+		return;
+	}
+	int i;
+	for(i = 1; i <= n; ++i)
+	{
+		if(pos == 0)
+		{
+			if(i % 2 == 1)
+			{
+				arr[pos] = i;
+				partitionworker6(arr, pos + 1, n - i);	
+			}
+		}
+		if(pos > 0)
+		{
+			if(arr[pos - 1] % 2 == 1)
+			{
+				if(i % 2 == 0)
+				{
+					arr[pos] = i;
+					partitionworker6(arr, pos + 1, n - i);	
+				}
+			}
+			if(arr[pos - 1] % 2 == 0)
+			{
+				if(i % 2 == 1)
+				{
+					arr[pos] = i;
+					partitionworker6(arr, pos + 1, n - i);	
+				}
+			}
+		}
+
+	}
+	
+	return;
+}
 /*
  * =================================================================
  * This function prints prime number only partitions of a positive integer value
