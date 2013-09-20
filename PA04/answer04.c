@@ -43,6 +43,7 @@ void partitionAll(int value)
 	// int ind2 = 0;
 	// int val = 0;
 	// int iter = 0;
+	//Allocates max memory, which is the number of integers and then frees it
 	int * arr = malloc(sizeof(int) * value);
 	partitionworker(arr, 0, value);
 	
@@ -52,6 +53,10 @@ void partitionAll(int value)
 
 void partitionworker(int * arr, int pos, int n)
 {
+	/*Recursive function which prints all partitions.
+	Puts a value for the first variable, then partitions the remainder from the sum,
+	continues until n is 0.*/
+	
 	if(n <= 0)
 	{
 		print(arr, pos);
@@ -71,6 +76,7 @@ void partitionworker(int * arr, int pos, int n)
 
 void print (int * arr, int len)
 {
+	/* Simple Print function which prints all variables in the array*/
 	int i;
 	if(len > 0)
 	{
@@ -119,6 +125,8 @@ void partitionIncreasing(int value)
 
 void partitionworker2(int * arr, int pos, int n)
 {
+	/* Same as above partition function, just has an if which makes sure that the array is increasing,
+	adds the value to the array only if it is larger than the variable before it */
 	if(n <= 0)
 	{
 		print(arr, pos);
@@ -178,6 +186,8 @@ void partitionDecreasing(int value)
 
 void partitionworker3(int * arr, int pos, int n)
 {
+	/* Same as initial partition function, just has an if which makes sure that the array is decreasing,
+	adds the value to the array only if it is smaler than the variable before it */
 	if(n <= 0)
 	{
 		print(arr, pos);
@@ -231,6 +241,8 @@ void partitionOdd(int value)
 
 void partitionworker4(int * arr, int pos, int n)
 {
+	/* Same as initial partition function, just has an if which makes sure that the array has odd numbers only,
+	checks if the value is odd, if it is, the value is added to the array */
 	if(n <= 0)
 	{
 		print(arr, pos);
@@ -281,6 +293,8 @@ void partitionEven(int value)
 
 void partitionworker5(int * arr, int pos, int n)
 {
+	/* Same as initial partition function, just has an if which makes sure that the array has even numbers only,
+	checks if the value is even, if it is, the value is added to the array */
 	if(n <= 0)
 	{
 		print(arr, pos);
@@ -331,6 +345,8 @@ void partitionOddAndEven(int value)
 
 void partitionworker6(int * arr, int pos, int n)
 {
+	/* Same as initial partition function, just has an if which makes sure that the array has an odd numbers first and then alternates with even numbers,
+	if the value in the position is even, then only an odd number can be added to the array and vice versa */
 	if(n <= 0)
 	{
 		print(arr, pos);
@@ -403,6 +419,8 @@ void partitionPrime(int value)
 
 void partitionworker7(int * arr, int pos, int n)
 {	
+	/* Same as initial partition function, just has an if which makes sure that the array has prime numbers only,
+	checks if value is 1 or divisible by 2. It then runs through all numbers except multiples of 2 to check if i is divisible by it */
 	int check = 1;
 	int ind;
 	if(n <= 0)
@@ -411,10 +429,14 @@ void partitionworker7(int * arr, int pos, int n)
 		return;
 	}
 	int i;
-	for(i = 1; i <= n; ++i)
+	for(i = 1; i <= n; i++)
 	{
 		check = 1;
-		for(ind = 2; ind < i; ++ind)
+		if(i > 2 && i % 2 == 0)
+		{
+			check = 0;
+		}
+		for(ind = 3; ind < i; ind += 2)
 		{
 			if(i % ind == 0)
 			{
