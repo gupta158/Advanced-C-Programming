@@ -435,17 +435,23 @@ void partitionworker7(int * arr, int pos, int n)
 		if(i > 2 && i % 2 == 0)
 		{
 			check = 0;
-		}
-		for(ind = 3; ind < i; ind += 2)
-		{
-			if(i % ind == 0)
-			{
-				check = 0;
-			}
-		}
+		}	
 		if(i == 1)
 		{
 			check = 0;
+		}
+
+		if(check != 0)
+		{
+			for(ind = 3; ind < i; ind += 2)
+			{
+				if(i % ind == 0)
+				{
+					check = 0;
+					//ind = i;
+				}
+			}
+
 		}
 		if(check == 1)
 		{
