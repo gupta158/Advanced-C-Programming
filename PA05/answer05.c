@@ -169,7 +169,59 @@ int * readInteger(char * filename, int * numInteger)
 
 char * * readString(char * filename, int * numString)
 {
-}
+	int count = 0;
+	int rows = 0;
+	int numberoflines;
+	int number = 0;
+	int num = 0;
+	FILE* fh;
+	char * * array;
+	array = malloc(sizeof(char) * MAXIMUM_LENGTH);
+	//Opened file
+	fh = fopen(filename,"r"); 
+	if(fh == NULL)
+	{
+		return NULL;
+	}
+	else
+	{
+		while (fgets(array, MAXIMUM_LENGTH, fh) != NULL)
+		{
+			numberoflines++;
+		}
+		// while (fgets(array, MAXIMUM_LENGTH, fh) != NULL)
+		// {
+			// numberoflines++;
+		// }
+		printf("num");
+		array[MAXIMUM_LENGTH] = malloc(sizeof(char) * numberoflines);
+		//fclose(fptr);
+		//Counting the number of values
+		/*while(fgets(fh, "%d", fh) == 1)
+		{
+			rows++;
+		}*/
+		//Allocating memory to the array
+		//char * array = malloc(sizeof(char) * count);
+		//Going back to the start
+		fseek(fh, 0, SEEK_SET );
+		//Transfering values to array
+		// while (fgets(array, MAXIMUM_LENGTH, fh) != NULL)
+		// {
+			// while (fgets(array, MAXIMUM_LENGTH, fh) != NULL)
+			// {
+				// //array[num][count];
+				// count++;
+			// }
+			//num++;
+		}
+		fclose(fh);
+		//*numInteger = count;
+		return array;
+		
+	}
+
+//}
 
 /* ----------------------------------------------- */
 /*
@@ -195,6 +247,7 @@ void printString(char * * arrString, int numString)
  */
 void freeInteger(int * arrInteger, int numInteger)
 {
+	free(arrInteger);
 }
 
 /* ----------------------------------------------- */
@@ -205,6 +258,11 @@ void freeInteger(int * arrInteger, int numInteger)
  */
 void freeString(char * * arrString, int numString)
 {
+	int row;
+    for (row = 0; row < numString; ++row) {
+        free(arrString[row]);
+    }
+    free(arrString);
 }
 
 /* ----------------------------------------------- */
@@ -227,6 +285,23 @@ void freeString(char * * arrString, int numString)
 
 int saveInteger(char * filename, int * arrInteger, int numInteger)
 {
+	FILE *fh;
+	int num;
+	fh = fopen(filename,"w");
+	if(fh == NULL)
+	{
+		return 0;
+	}
+	
+	for(num = 0; num < numInteger; num++)
+	{
+		fprintf(fh, "%d", arrInteger[num]);
+		fprintf(fh,"\n");
+	}
+	
+	
+	fclose(fh);
+	return 1;
 }
 
 /* ----------------------------------------------- */
@@ -249,6 +324,28 @@ int saveInteger(char * filename, int * arrInteger, int numInteger)
 
 int saveString(char * filename, char * * arrString, int numString)
 {
+	FILE *fh;
+	int num;
+	int num2 = 0;
+	fh = fopen(filename,"w");
+	if(fh == NULL)
+	{
+		return 0;
+	}
+	for(num = 0; num < numString; num++)
+	{
+		num2 = 0;
+		while(arrString[num][num2] != '/0')
+		{
+			fprintf(fh, "%c", arrString[num2][num]);
+			num2++;
+		}
+		fprintf(fh,"\n");
+		return 1;
+	}
+	
+	fclose(fh);
+
 }
 
 /* ----------------------------------------------- */
