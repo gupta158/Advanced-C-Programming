@@ -3,7 +3,8 @@
 #include <string.h>
 #include "pa05.h"
 #define MAXIMUM_LENGTH 80
-
+int compare(const void*, const void*);
+int *compare2(char**, char**);
 /*
  * Read a file of integers.
  *
@@ -169,13 +170,14 @@ int * readInteger(char * filename, int * numInteger)
 
 char * * readString(char * filename, int * numString)
 {
-	int count = 0;
-	int rows = 0;
-	int numberoflines;
-	int number = 0;
-	int num = 0;
+	// int count = 0;
+	// int rows = 0;
+	int numberoflines = 0;
+	// int number = 0;
+	// int num = 0;
 	FILE* fh;
 	char * * array;
+	char *str;
 	array = malloc(sizeof(char) * MAXIMUM_LENGTH);
 	//Opened file
 	fh = fopen(filename,"r"); 
@@ -185,11 +187,14 @@ char * * readString(char * filename, int * numString)
 	}
 	else
 	{
-		while (fgets(array, MAXIMUM_LENGTH, fh) != NULL)
+		while (feof(fh) == 0)
 		{
+			str = fgets(array, MAXIMUM_LENGTH, fh);
 			numberoflines++;
+			
 		}
-		// while (fgets(array, MAXIMUM_LENGTH, fh) != NULL)
+		printf("Number of lines:%d \n", numberoflines);
+		// while (
 		// {
 			// numberoflines++;
 		// }
@@ -206,14 +211,17 @@ char * * readString(char * filename, int * numString)
 		//Going back to the start
 		fseek(fh, 0, SEEK_SET );
 		//Transfering values to array
-		// while (fgets(array, MAXIMUM_LENGTH, fh) != NULL)
-		// {
+		int i = 0;
+		while (fgets(array, MAXIMUM_LENGTH, fh) != NULL)
+		 {
+			array[i] = fgets(array, MAXIMUM_LENGTH, fh);
 			// while (fgets(array, MAXIMUM_LENGTH, fh) != NULL)
 			// {
 				// //array[num][count];
 				// count++;
 			// }
 			//num++;
+			i++;
 		}
 		fclose(fh);
 		//*numInteger = count;
@@ -221,7 +229,7 @@ char * * readString(char * filename, int * numString)
 		
 	}
 
-//}
+}
 
 /* ----------------------------------------------- */
 /*
@@ -229,6 +237,12 @@ char * * readString(char * filename, int * numString)
  */
 void printInteger(int * arrInteger, int numInteger)
 {
+	int a;
+	for(a = 0; a < numInteger; a++)
+	{
+		printf("%d\n", arrInteger[a]);
+	}
+	return;
 }
 
 /* ----------------------------------------------- */
@@ -239,6 +253,12 @@ void printInteger(int * arrInteger, int numInteger)
  */
 void printString(char * * arrString, int numString)
 {
+	int a;
+	for(a = 0; a < numString; a++)
+	{
+		printf("%s\n", arrString[a]);
+	}
+	return;
 }
 
 /* ----------------------------------------------- */
@@ -259,7 +279,8 @@ void freeInteger(int * arrInteger, int numInteger)
 void freeString(char * * arrString, int numString)
 {
 	int row;
-    for (row = 0; row < numString; ++row) {
+    for (row = 0; row < numString; ++row) 
+	{
         free(arrString[row]);
     }
     free(arrString);
@@ -323,7 +344,7 @@ int saveInteger(char * filename, int * arrInteger, int numInteger)
  */
 
 int saveString(char * filename, char * * arrString, int numString)
-{
+ {
 	FILE *fh;
 	int num;
 	int num2 = 0;
@@ -335,7 +356,7 @@ int saveString(char * filename, char * * arrString, int numString)
 	for(num = 0; num < numString; num++)
 	{
 		num2 = 0;
-		while(arrString[num][num2] != '/0')
+		while(arrString[num][num2] != '\0')
 		{
 			fprintf(fh, "%c", arrString[num2][num]);
 			num2++;
@@ -358,8 +379,13 @@ int saveString(char * filename, char * * arrString, int numString)
 
 void sortInteger(int * arrInteger, int numInteger)
 {
+	qsort(arrInteger, numInteger, sizeof(int), compare);
 }
 
+int compare(const void * a, const void * b)
+{
+   return ( *(int*)a - *(int*)b );
+}
 
 /* ----------------------------------------------- */
 /*
@@ -374,6 +400,15 @@ void sortInteger(int * arrInteger, int numInteger)
 
 void sortString(char * * arrString, int numString)
 {
+qsort(arrString, numString, sizeof(char), compare2);
 }
+
+int *compare2(char ** str1,char ** str2) 
+{
+	int* com;
+	*com = strcmp(**str1, **str2);
+	return com;
+}
+
 
 
