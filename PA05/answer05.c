@@ -190,7 +190,7 @@ char * * readString(char * filename, int * numString)
 	{
 		//while (feof(fh) == 0)
 		//{
-		int c = 0;
+		//int c = 0;
 		// c = fgetc(fh);
 			// while(c != EOF);
 			// //if(str != NULL)
@@ -208,12 +208,12 @@ char * * readString(char * filename, int * numString)
 		}
 		//}
 	
-		printf("Number of lines:%d \n", numberoflines);
+		//printf("Number of lines:%d \n", numberoflines);
 		// while (
 		// {
 			// numberoflines++;
 		// }
-		printf("num");
+		//printf("num");
 		array= malloc(sizeof(char*) * numberoflines);
 		//fclose(fptr);
 		//Counting the number of values
@@ -238,14 +238,14 @@ char * * readString(char * filename, int * numString)
 			i+=1;
 		  
 		}
-			printf("inai \n");
+			//printf("inai \n");
 				// array[i] = malloc(sizeof(char) * (strlen(buffer) + 1));
 				// strcpy(array[i], buffer);
 				// i++;
 			
 		//}
 		//int c;
-		printf("aod\n");
+		//printf("aod\n");
 		// for(i = 0; i < numberoflines; i++)
 		// {
 			// for(c = 0; c < MAXIMUM_LENGTH; c++)
@@ -306,19 +306,24 @@ void printInteger(int * arrInteger, int numInteger)
  */
 void printString(char * * arrString, int numString)
 {
-	int num;
-	int num2;
-	for(num = 0; num < numString; num++)
+	int a;
+	for(a =0; a < numString;a++)
 	{
-		num2 = 0;
-		while(arrString[num][num2] != '\0')
-		{
-			printf("%c",arrString[num][num2]);
-			num2++;
-		}
-		printf("\n");
-		
+		printf("%s", arrString[a]);
+		//printf("\n");
 	}
+	// int num;
+	// int num2;
+	// for(num = 0; num < numString; num++)
+	// {
+		// num2 = 0;
+		// while(arrString[num][num2] != '\0')
+		// {
+			// printf("%c",arrString[num][num2]);
+			// num2++;
+		// }
+		
+	// }
 	
 }
 
@@ -416,13 +421,13 @@ int saveString(char * filename, char * * arrString, int numString)
 	}
 	for(num = 0; num < numString; num++)
 	{
-		num2 = 0;
-		while(arrString[num][num2] != '\0')
-		{
-			fprintf(fh, "%c", arrString[num][num2]);
+		//num2 = 0;
+		//while(arrString[num][num2] != '\0')
+		//{
+			fprintf(fh, "%s", arrString[num]);
 			num2++;
-		}
-		fprintf(fh,"\n");
+	//	}
+		//fprintf(fh,"\n");
 		//return 1;
 	}
 	
@@ -479,7 +484,7 @@ int compare(const void * a, const void * b)
 
 void sortString(char * * arrString, int numString)
 {
-   //  qsort(arrString, numString, sizeof(char*), compare2);
+    qsort(arrString, numString, sizeof(char*), compare2);
 }
 
 int compare2(const void * str1,const void * str2) 
