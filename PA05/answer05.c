@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "pa05.h"
-#define MAXIMUM_LENGTH 80
+
 int compare(const void*, const void*);
 int compare2(const void*, const void*);
 /*
@@ -170,17 +170,10 @@ int * readInteger(char * filename, int * numInteger)
 
 char * * readString(char * filename, int * numString)
 {
-	// int count = 0;
-	// int rows = 0;
 	int numberoflines = 0;
-	// int number = 0;
-	// int num = 0;
 	FILE* fh;
 	char * * array;
 	char buffer[MAXIMUM_LENGTH];
-	//char *str;
-	//buffer = malloc(sizeof(char) * MAXIMUM_LENGTH);
-	//Opened file
 	fh = fopen(filename,"r"); 
 	if(fh == NULL)
 	{
@@ -188,95 +181,28 @@ char * * readString(char * filename, int * numString)
 	}
 	else
 	{
-		//while (feof(fh) == 0)
-		//{
-		//int c = 0;
-		// c = fgetc(fh);
-			// while(c != EOF);
-			// //if(str != NULL)
-			// {
-				// if(c == '\n');
-				// {
-					// numberoflines++;
-				// }
-				// c = fgetc(fh);
-			// }
+	    //counting the number of lines
 		while(fgets(buffer, MAXIMUM_LENGTH, fh))
 		{
-			//printf("%c \n",buffer[0]);
-				numberoflines++;
+			numberoflines++;
 		}
-		//}
-	
-		//printf("Number of lines:%d \n", numberoflines);
-		// while (
-		// {
-			// numberoflines++;
-		// }
-		//printf("num");
+		//Allocating memory
 		array= malloc(sizeof(char*) * numberoflines);
-		//fclose(fptr);
-		//Counting the number of values
-		/*while(fgets(fh, "%d", fh) == 1)
-		{
-			rows++;
-		}*/
-		//Allocating memory to the array
-		//char * array = malloc(sizeof(char) * count);
 		//Going back to the start
 		fseek(fh, 0, SEEK_SET );
 		//Transfering values to array
 		int i = 0;
-		// for(c = 0; c <= numberoflines; c++)
-		// {
+		//Reading each line and allocating memory per line and  storing it in the new array
 		while(fgets(buffer, MAXIMUM_LENGTH, fh) != NULL)
 		{
-			//printf("inai \n");
-		//	printf("%c \n",buffer[0]);
 			array[i] = malloc(sizeof(char) * (strlen(buffer) + 1));
 			strcpy(array[i], buffer);
 			i+=1;
 		  
 		}
-			//printf("inai \n");
-				// array[i] = malloc(sizeof(char) * (strlen(buffer) + 1));
-				// strcpy(array[i], buffer);
-				// i++;
-			
-		//}
-		//int c;
-		//printf("aod\n");
-		// for(i = 0; i < numberoflines; i++)
-		// {
-			// for(c = 0; c < MAXIMUM_LENGTH; c++)
-			// {
-				// printf("array values = %c", array[i][c]);
-			// }
-			// printf("\n");
-		// }
-		
-		// while ( fgets (array, sizeof array, fh ) != NULL ) /* read a line */
-		// {
-			// fputs ( array, stdout ); /* write the line */
-		// }
-		// while (fgets(array[i], MAXIMUM_LENGTH, fh) != NULL )
-		 // {
-			// // while(fgets(array[i], MAXIMUM_LENGTH, fh) != '\n')
-			// // {
-				// // array[i] = fgets(array, MAXIMUM_LENGTH, fh);
-				// // printf("array = %s\n", array[i]);
-			// // }
-			// // while (fgets(array, MAXIMUM_LENGTH, fh) != NULL)
-			// // {
-				// // //array[num][count];
-				// // count++;
-			// // }
-			// //num++;
-			// i++;
-		// }
+		//Close file
 		fclose(fh);
 		*numString =  numberoflines;
-		//*numInteger = count;
 		return array;
 		
 	}
@@ -307,23 +233,17 @@ void printInteger(int * arrInteger, int numInteger)
 void printString(char * * arrString, int numString)
 {
 	int a;
-	for(a =0; a < numString;a++)
+	int len;
+	//Prints the string
+	for(a = 0; a < numString;a++)
 	{
 		printf("%s", arrString[a]);
-		//printf("\n");
+	    len = strlen(arrString[a]);     
+        if(len == 0 || arrString[a][len-1] != '\n') 
+		{
+			printf("\n");
+		}
 	}
-	// int num;
-	// int num2;
-	// for(num = 0; num < numString; num++)
-	// {
-		// num2 = 0;
-		// while(arrString[num][num2] != '\0')
-		// {
-			// printf("%c",arrString[num][num2]);
-			// num2++;
-		// }
-		
-	// }
 	
 }
 
@@ -344,6 +264,7 @@ void freeInteger(int * arrInteger, int numInteger)
  */
 void freeString(char * * arrString, int numString)
 {
+	//First frees memory of each line, then of the array of the pointers
 	int row;
     for (row = 0; row < numString; row++) 
 	{
@@ -374,12 +295,13 @@ int saveInteger(char * filename, int * arrInteger, int numInteger)
 {
 	FILE *fh;
 	int num;
+	//Opens file
 	fh = fopen(filename,"w");
 	if(fh == NULL)
 	{
 		return 0;
 	}
-	
+	//Stores the numbers in the file
 	for(num = 0; num < numInteger; num++)
 	{
 		fprintf(fh, "%d", arrInteger[num]);
@@ -414,6 +336,8 @@ int saveString(char * filename, char * * arrString, int numString)
 	FILE *fh;
 	int num;
 	int num2 = 0;
+	int len;
+	//Opens file
 	fh = fopen(filename,"w");
 	if(fh == NULL)
 	{
@@ -421,15 +345,15 @@ int saveString(char * filename, char * * arrString, int numString)
 	}
 	for(num = 0; num < numString; num++)
 	{
-		//num2 = 0;
-		//while(arrString[num][num2] != '\0')
-		//{
-			fprintf(fh, "%s", arrString[num]);
-			num2++;
-	//	}
-		//fprintf(fh,"\n");
-		//return 1;
+		fprintf(fh, "%s", arrString[num]);
+		num2++;
+        len = strlen(arrString[num]);     
+        if(len == 0 || arrString[num][len-1] != '\n') 
+		{
+			fprintf(fh,"\n");
+		}
 	}
+
 	
 	fclose(fh);
 	return 1;
@@ -468,7 +392,7 @@ int compare(const void * a, const void * b)
 	}
 	
 	return 1;
-   //return ( *(int*)a - *(int*)b );
+   
 }
 
 /* ----------------------------------------------- */
@@ -489,7 +413,6 @@ void sortString(char * * arrString, int numString)
 
 int compare2(const void * str1,const void * str2) 
 {
-	//return ( **(char**)str1 - **(char**)str2 );
 	char** p1 = (char**) str1;
 	char** p2 = (char**) str2;
 	
@@ -497,17 +420,7 @@ int compare2(const void * str1,const void * str2)
 	char *val2 = *p2;
 	
 	return strcmp(val, val2);
-	// if(val < val2)
-	// {
-		// return -1;
-	// }
-	
-	// if(val == val2)
-	// {
-		// return 0;
-	// }
-	
-	// return 1;
+
 }
 
 
