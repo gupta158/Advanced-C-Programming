@@ -163,7 +163,64 @@
  */
 struct Image * loadImage(const char* filename)
 {
+	FILE * fh;
+	//void * ptr = malloc(16);
+	size_t size = 1;
+	size_t nmemb = 16;
+	//char* comment;
+	struct ImageHeader ptr[16];
+	struct Image* a = malloc(sizeof(struct Image));
+	//char * strcomment;
+	//char *comment;
+	//a->width = 4;
+	//a.height = 4;
+	//a.comment = comment;
+	//a.data = ECE264_IMAGE_MAGIC_BITS;
+	//*ptr = {0};
+	//int ptr[16];
+	size_t bytesnum = 0;
+	fh = fopen(filename, "r");
+	
+	if(fh == NULL)
+	{
+		return NULL;
+	}
+	
+	
+	 bytesnum = fread(ptr, size, nmemb, fh);
+	if(bytesnum != nmemb)
+	{
+		printf("ERROR");
+		return NULL;
+	}
+	 if(ptr->magic_bits != ECE264_IMAGE_MAGIC_BITS)
+	 {
+		return NULL;
+	 }
+
+	if(ptr->width <= 0 || ptr->height <= 0)
+	{
+		return NULL;
+	}
+	
+
+	char* comment = malloc(sizeof(char) * ptr->comment_len);
+	//bytesnum = fread(comment, size, nmemb, fh);
+	if(comment == NULL)
+	{
+		return NULL;
+	}
+	
+	bytesnum = fread(comment, size, ptr->comment_len, fh);
+	if(bytesnum != ptr->comment_len)
+	{
+		return NULL;
+	}
+	
+	//if
     return NULL;
+	printf("FINE");
+	return a;
 }
 
 
