@@ -1,0 +1,8 @@
+
+   Usage: pa06 <image-file> <output-filename>
+
+      Loads <image-file> which is a black and white
+      image file in ee264 file. Then applies linear
+      normalization, and saves the output in
+      <output-filename> in ppm format.
+
