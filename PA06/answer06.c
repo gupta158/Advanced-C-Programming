@@ -169,9 +169,10 @@ struct Image * loadImage(const char* filename)
 	size_t nmemb = 16;
 	//char* comment;
 	struct ImageHeader ptr[16];
-	struct Image* a = malloc(sizeof(struct Image));
+	struct Image* imagedisk = malloc(sizeof(struct Image));
 	//char * strcomment;
-	//char *comment;
+	char *comment1;
+	uint8_t * var;
 	//a->width = 4;
 	//a.height = 4;
 	//a.comment = comment;
@@ -183,44 +184,87 @@ struct Image * loadImage(const char* filename)
 	
 	if(fh == NULL)
 	{
+		printf("jndnkn");
 		return NULL;
 	}
-	
+	printf("NO!!!");
 	
 	 bytesnum = fread(ptr, size, nmemb, fh);
 	if(bytesnum != nmemb)
 	{
-		printf("ERROR");
+		printf("a");
+		free(imagedisk);
+		//printf("ERROR");
 		return NULL;
 	}
 	 if(ptr->magic_bits != ECE264_IMAGE_MAGIC_BITS)
 	 {
+		printf("b");
 		return NULL;
 	 }
 
 	if(ptr->width <= 0 || ptr->height <= 0)
 	{
+		printf("c");
 		return NULL;
 	}
 	
 
-	char* comment = malloc(sizeof(char) * ptr->comment_len);
+	comment1 = malloc(sizeof(char) * ptr->comment_len);
 	//bytesnum = fread(comment, size, nmemb, fh);
-	if(comment == NULL)
+	if(comment1 == NULL)
 	{
+		printf("d");
+		//free(imagedisk);
+		free(comment1);
 		return NULL;
 	}
-	
-	bytesnum = fread(comment, size, ptr->comment_len, fh);
+
+	bytesnum = fread(comment1, size, ptr->comment_len, fh);
+	if(comment1[ptr->comment_len - 1] != '\0')
+	{
+		printf("e");
+		return NULL;
+	}
 	if(bytesnum != ptr->comment_len)
 	{
+		printf("f");
 		return NULL;
 	}
 	
-	//if
-    return NULL;
+	var = malloc(sizeof(uint8_t) * ptr->width * ptr->height);
+	if(var == NULL)
+	{
+		printf("g");
+		//free(imagedisk);
+		free(comment1);
+		free(var);
+		return NULL;
+	}
+	bytesnum = fread(var, size, ptr->height * (ptr->width), fh);
+	if(bytesnum != ptr->height * (ptr->width))
+	{
+		printf("h");
+		return NULL;
+	}
+	bytesnum = fread(var, size, 1, fh);
+	if(bytesnum != 0)
+	{
+		printf("i");
+		printf("ERRORR!!!!!!!! \n");
+		return NULL;
+	}
+    //return NULL;
 	printf("FINE");
-	return a;
+	
+	imagedisk->width = ptr->width;
+	imagedisk->height = ptr->height;
+	imagedisk->comment = comment1;
+	imagedisk->data = var;
+	//free(ptr);
+	free(comment1);
+	free(var);
+	return imagedisk;
 }
 
 
@@ -235,8 +279,18 @@ struct Image * loadImage(const char* filename)
  * report an error. 
  */
 void freeImage(struct Image * image)
-{
-
+{	
+	if(image != NULL)
+	{
+		
+		printf("HMM");
+		free(image->comment);
+		free(image->data);
+		free(image);
+		// free(imagedisk);
+		// free(comment);
+		// free(var);
+	}
 }
 
 /*
@@ -265,7 +319,28 @@ void freeImage(struct Image * image)
  */
 void linearNormalization(struct Image * image)
 {
-
+	int min = 255;
+	int max = 0;
+	int num = 0;
+	for(num = 0; num < (image->width * image->height); num ++)
+	{
+		if(image->data[num] > max)
+		{
+			max = image->data[num];
+		}
+		
+		if(image->data[num] < min)
+		{
+			min = image->data[num];
+		}
+	}
+	
+	for(num = 0; num < (image->width * image->height); num ++)
+	{
+		image->data[num] = (image->data[num] - min) * 255.0 / (max - min);
+	}
+	
+	return;
 }
 
 
