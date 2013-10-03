@@ -168,7 +168,7 @@ struct Image * loadImage(const char* filename)
 	size_t size = 1;
 	size_t nmemb = 16;
 	//char* comment;
-	struct ImageHeader ptr[16];
+	struct ImageHeader ptr[1];
 	struct Image* imagedisk = malloc(sizeof(struct Image));
 	//char * strcomment;
 	char *comment1;
@@ -179,6 +179,7 @@ struct Image * loadImage(const char* filename)
 	//a.data = ECE264_IMAGE_MAGIC_BITS;
 	//*ptr = {0};
 	//int ptr[16];
+	//int num;
 	size_t bytesnum = 0;
 	fh = fopen(filename, "r");
 	
@@ -199,12 +200,14 @@ struct Image * loadImage(const char* filename)
 	}
 	 if(ptr->magic_bits != ECE264_IMAGE_MAGIC_BITS)
 	 {
+		free(imagedisk);
 		printf("b");
 		return NULL;
 	 }
 
 	if(ptr->width <= 0 || ptr->height <= 0)
 	{
+		free(imagedisk);
 		printf("c");
 		return NULL;
 	}
@@ -215,7 +218,7 @@ struct Image * loadImage(const char* filename)
 	if(comment1 == NULL)
 	{
 		printf("d");
-		//free(imagedisk);
+		free(imagedisk);
 		free(comment1);
 		return NULL;
 	}
@@ -223,11 +226,15 @@ struct Image * loadImage(const char* filename)
 	bytesnum = fread(comment1, size, ptr->comment_len, fh);
 	if(comment1[ptr->comment_len - 1] != '\0')
 	{
+		free(imagedisk);
+		free(comment1);
 		printf("e");
 		return NULL;
 	}
 	if(bytesnum != ptr->comment_len)
 	{
+		free(imagedisk);
+		free(comment1);
 		printf("f");
 		return NULL;
 	}
@@ -235,8 +242,9 @@ struct Image * loadImage(const char* filename)
 	var = malloc(sizeof(uint8_t) * ptr->width * ptr->height);
 	if(var == NULL)
 	{
+		
 		printf("g");
-		//free(imagedisk);
+		free(imagedisk);
 		free(comment1);
 		free(var);
 		return NULL;
@@ -244,12 +252,18 @@ struct Image * loadImage(const char* filename)
 	bytesnum = fread(var, size, ptr->height * (ptr->width), fh);
 	if(bytesnum != ptr->height * (ptr->width))
 	{
+		free(imagedisk);
+		free(comment1);
+		free(var);
 		printf("h");
 		return NULL;
 	}
 	bytesnum = fread(var, size, 1, fh);
 	if(bytesnum != 0)
 	{
+		free(imagedisk);
+		free(comment1);
+		free(var);
 		printf("i");
 		printf("ERRORR!!!!!!!! \n");
 		return NULL;
@@ -259,11 +273,20 @@ struct Image * loadImage(const char* filename)
 	
 	imagedisk->width = ptr->width;
 	imagedisk->height = ptr->height;
+	// for(num = 0; num < ptr->comment_len; num++)
+	// {
+		// imagedisk->comment[num] = comment1[num];
+	// }
+	// for(num = 0; num < (ptr->width * ptr->height); num++)
+	// {
+		// imagedisk->data[num] = var[num];
+	// }
 	imagedisk->comment = comment1;
 	imagedisk->data = var;
 	//free(ptr);
-	free(comment1);
-	free(var);
+	//free(comment1);
+	//free(var);
+	fclose(fh);
 	return imagedisk;
 }
 
