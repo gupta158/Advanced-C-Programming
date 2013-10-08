@@ -164,128 +164,130 @@
 struct Image * loadImage(const char* filename)
 {
 	FILE * fh;
-	//void * ptr = malloc(16);
 	size_t size = 1;
-	size_t nmemb = 16;
-	//char* comment;
-	struct ImageHeader ptr[1];
+	size_t nmemb = 1;
+	struct ImageHeader* ptr = malloc(sizeof(struct ImageHeader));
 	struct Image* imagedisk = malloc(sizeof(struct Image));
-	//char * strcomment;
 	char *comment1;
 	uint8_t * var;
-	//a->width = 4;
-	//a.height = 4;
-	//a.comment = comment;
-	//a.data = ECE264_IMAGE_MAGIC_BITS;
-	//*ptr = {0};
-	//int ptr[16];
-	//int num;
 	size_t bytesnum = 0;
-	fh = fopen(filename, "r");
 	
+	/*Frees memory for the mallocs that have already been assigned
+	if there is any error and null is going to be returned */
+	
+	//Opens file and check if it was 
+	fh = fopen(filename, "r");
 	if(fh == NULL)
 	{
-		printf("jndnkn");
+		free(ptr);
+		free(imagedisk);
 		return NULL;
 	}
-	printf("NO!!!");
 	
-	 bytesnum = fread(ptr, size, nmemb, fh);
+	//Reads ImageHeader and checks if it was successful
+	bytesnum = fread(ptr, sizeof(struct ImageHeader), nmemb, fh);
 	if(bytesnum != nmemb)
 	{
-		printf("a");
 		free(imagedisk);
-		//printf("ERROR");
+		free(ptr);
+		fclose(fh);
 		return NULL;
 	}
-	 if(ptr->magic_bits != ECE264_IMAGE_MAGIC_BITS)
-	 {
+	
+	//Check if the magic bits are correct
+	if(ptr->magic_bits != ECE264_IMAGE_MAGIC_BITS)
+	{
 		free(imagedisk);
-		printf("b");
+		free(ptr);
+		fclose(fh);
 		return NULL;
-	 }
+	}
 
+	//Checks if the width and height are sane
 	if(ptr->width <= 0 || ptr->height <= 0)
 	{
 		free(imagedisk);
-		printf("c");
+		free(ptr);
+		fclose(fh);
+		return NULL;
+	}
+
+	//Allots memory for the comment and checks if it allotted a non null pointer
+	comment1 = malloc(sizeof(char) * ptr->comment_len);
+	if(comment1 == NULL && ptr->comment_len > 0)
+	{
+		free(imagedisk);
+		free(comment1);
+		free(ptr);
+		fclose(fh);
+		return NULL;
+	}
+
+	//Reads the comment and checks if it successfully read it
+	bytesnum = fread(comment1, ptr->comment_len, nmemb, fh);
+	if(bytesnum != nmemb)
+	{
+		free(imagedisk);
+		free(comment1);
+		free(ptr);
+		fclose(fh);
 		return NULL;
 	}
 	
-
-	comment1 = malloc(sizeof(char) * ptr->comment_len);
-	//bytesnum = fread(comment, size, nmemb, fh);
-	if(comment1 == NULL)
-	{
-		printf("d");
-		free(imagedisk);
-		free(comment1);
-		return NULL;
-	}
-
-	bytesnum = fread(comment1, size, ptr->comment_len, fh);
+	//If there is no null byte, it returns an error
 	if(comment1[ptr->comment_len - 1] != '\0')
 	{
 		free(imagedisk);
 		free(comment1);
-		printf("e");
+		free(ptr);
+		fclose(fh);
 		return NULL;
 	}
-	if(bytesnum != ptr->comment_len)
-	{
-		free(imagedisk);
-		free(comment1);
-		printf("f");
-		return NULL;
-	}
-	
+
+	/*Allocates memory to var and checks if it is successfull
+	if height or width are too big then a null pointer will be assigned*/
 	var = malloc(sizeof(uint8_t) * ptr->width * ptr->height);
 	if(var == NULL)
 	{
-		
-		printf("g");
 		free(imagedisk);
 		free(comment1);
 		free(var);
+		free(ptr);
+		fclose(fh);
 		return NULL;
 	}
-	bytesnum = fread(var, size, ptr->height * (ptr->width), fh);
-	if(bytesnum != ptr->height * (ptr->width))
+	
+	//Reads the data and checks if it was successful
+	bytesnum = fread(var, ptr->height * (ptr->width), nmemb, fh);
+	if(bytesnum != nmemb)
 	{
 		free(imagedisk);
 		free(comment1);
 		free(var);
-		printf("h");
+		free(ptr);
+		fclose(fh);
 		return NULL;
 	}
-	bytesnum = fread(var, size, 1, fh);
+	
+	//Checks if there is any additional data, if there is, it returns an error
+	bytesnum = fread(var, size, nmemb, fh);
 	if(bytesnum != 0)
 	{
 		free(imagedisk);
 		free(comment1);
 		free(var);
-		printf("i");
-		printf("ERRORR!!!!!!!! \n");
+		free(ptr);
+		fclose(fh);
 		return NULL;
 	}
-    //return NULL;
-	printf("FINE");
 	
+	//Assigns values to imagedisk
 	imagedisk->width = ptr->width;
 	imagedisk->height = ptr->height;
-	// for(num = 0; num < ptr->comment_len; num++)
-	// {
-		// imagedisk->comment[num] = comment1[num];
-	// }
-	// for(num = 0; num < (ptr->width * ptr->height); num++)
-	// {
-		// imagedisk->data[num] = var[num];
-	// }
 	imagedisk->comment = comment1;
 	imagedisk->data = var;
-	//free(ptr);
-	//free(comment1);
-	//free(var);
+	free(ptr);
+	
 	fclose(fh);
 	return imagedisk;
 }
@@ -303,17 +305,16 @@ struct Image * loadImage(const char* filename)
  */
 void freeImage(struct Image * image)
 {	
+	/*If there was an error, this function does nothing, 
+	but if there is no error, it frees the memory for image*/
 	if(image != NULL)
 	{
-		
-		printf("HMM");
 		free(image->comment);
 		free(image->data);
 		free(image);
-		// free(imagedisk);
-		// free(comment);
-		// free(var);
 	}
+	
+	return;
 }
 
 /*
@@ -345,6 +346,10 @@ void linearNormalization(struct Image * image)
 	int min = 255;
 	int max = 0;
 	int num = 0;
+	
+	/*Goes through the whole data,
+	if there is any value that is smaller than min,	it is assigned to min. 
+	If there is any value bigger than max, it is assigned to max */
 	for(num = 0; num < (image->width * image->height); num ++)
 	{
 		if(image->data[num] > max)
@@ -358,6 +363,7 @@ void linearNormalization(struct Image * image)
 		}
 	}
 	
+	//Applies the formula to the data
 	for(num = 0; num < (image->width * image->height); num ++)
 	{
 		image->data[num] = (image->data[num] - min) * 255.0 / (max - min);
