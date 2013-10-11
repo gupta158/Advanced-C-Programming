@@ -1,4 +1,3 @@
-
 /*
  * For this assigment you will write some functions that help 
  * accomplish the following procedure:
@@ -166,8 +165,7 @@ struct Image * loadImage(const char* filename)
 	FILE * fh;
 	size_t size = 1;
 	size_t nmemb = 1;
-	struct ImageHeader* ptr = malloc(sizeof(struct ImageHeader));
-	struct Image* imagedisk = malloc(sizeof(struct Image));
+	struct ImageHeader ptr;
 	char *comment1;
 	uint8_t * var;
 	size_t bytesnum = 0;
@@ -179,114 +177,104 @@ struct Image * loadImage(const char* filename)
 	fh = fopen(filename, "r");
 	if(fh == NULL)
 	{
-		free(ptr);
-		free(imagedisk);
 		return NULL;
 	}
 	
 	//Reads ImageHeader and checks if it was successful
-	bytesnum = fread(ptr, sizeof(struct ImageHeader), nmemb, fh);
+	bytesnum = fread(&ptr, sizeof(struct ImageHeader), nmemb, fh);
 	if(bytesnum != nmemb)
 	{
-		free(imagedisk);
-		free(ptr);
 		fclose(fh);
 		return NULL;
 	}
 	
 	//Check if the magic bits are correct
-	if(ptr->magic_bits != ECE264_IMAGE_MAGIC_BITS)
+	if(ptr.magic_bits != ECE264_IMAGE_MAGIC_BITS)
 	{
-		free(imagedisk);
-		free(ptr);
 		fclose(fh);
 		return NULL;
 	}
 
 	//Checks if the width and height are sane
-	if(ptr->width <= 0 || ptr->height <= 0)
+	if(ptr.width <= 0 || ptr.height <= 0)
 	{
-		free(imagedisk);
-		free(ptr);
 		fclose(fh);
 		return NULL;
 	}
 
 	//Allots memory for the comment and checks if it allotted a non null pointer
-	comment1 = malloc(sizeof(char) * ptr->comment_len);
-	if(comment1 == NULL && ptr->comment_len > 0)
+	comment1 = malloc(sizeof(char) * ptr.comment_len);
+	if(comment1 == NULL && ptr.comment_len > 0)
 	{
-		free(imagedisk);
 		free(comment1);
-		free(ptr);
 		fclose(fh);
 		return NULL;
 	}
 
 	//Reads the comment and checks if it successfully read it
-	bytesnum = fread(comment1, ptr->comment_len, nmemb, fh);
-	if(bytesnum != nmemb)
+	bytesnum = fread(comment1, sizeof(char), ptr.comment_len, fh);
+	if(bytesnum != ptr.comment_len)
 	{
-		free(imagedisk);
 		free(comment1);
-		free(ptr);
 		fclose(fh);
 		return NULL;
 	}
 	
 	//If there is no null byte, it returns an error
-	if(comment1[ptr->comment_len - 1] != '\0')
+	if(comment1[ptr.comment_len - 1] != '\0')
 	{
-		free(imagedisk);
 		free(comment1);
-		free(ptr);
 		fclose(fh);
 		return NULL;
 	}
 
 	/*Allocates memory to var and checks if it is successfull
 	if height or width are too big then a null pointer will be assigned*/
-	var = malloc(sizeof(uint8_t) * ptr->width * ptr->height);
+	var = malloc(sizeof(uint8_t) * ptr.width * ptr.height);
 	if(var == NULL)
 	{
-		free(imagedisk);
 		free(comment1);
 		free(var);
-		free(ptr);
 		fclose(fh);
 		return NULL;
 	}
 	
 	//Reads the data and checks if it was successful
-	bytesnum = fread(var, ptr->height * (ptr->width), nmemb, fh);
-	if(bytesnum != nmemb)
+	bytesnum = fread(var, sizeof(uint8_t), ptr.height * (ptr.width), fh);
+	if(bytesnum != (ptr.height * ptr.width))
 	{
-		free(imagedisk);
 		free(comment1);
 		free(var);
-		free(ptr);
 		fclose(fh);
 		return NULL;
 	}
 	
-	//Checks if there is any additional data, if there is, it returns an error
+	/*Checks if there is any additional data, if there is, 
+	it returns an error by reading one additional byte*/
 	bytesnum = fread(var, size, nmemb, fh);
 	if(bytesnum != 0)
 	{
-		free(imagedisk);
 		free(comment1);
 		free(var);
-		free(ptr);
 		fclose(fh);
 		return NULL;
 	}
 	
 	//Assigns values to imagedisk
-	imagedisk->width = ptr->width;
-	imagedisk->height = ptr->height;
+	struct Image* imagedisk = malloc(sizeof(struct Image));
+	if(imagedisk == NULL)
+	{		
+		free(comment1);
+		free(var);
+		fclose(fh);
+		return NULL;
+	}
+		
+	imagedisk->width = ptr.width;
+	imagedisk->height = ptr.height;
 	imagedisk->comment = comment1;
 	imagedisk->data = var;
-	free(ptr);
+	 
 	
 	fclose(fh);
 	return imagedisk;
