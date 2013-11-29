@@ -262,8 +262,16 @@ void processMoveList(char * state, const char * movelist)
  * Initialise a new MoveTree
  */
 MoveTree * MoveTree_create(const char * state, const char * moves)
-{
-    return NULL;
+{	
+	MoveTree * newtree = malloc(sizeof(MoveTree));
+	newtree -> state = malloc(sizeof(char) * (strlen(state) + 1));
+	newtree -> moves = malloc(sizeof(char) * (strlen(moves) + 1));
+	newtree->left = NULL;
+	newtree->right = NULL;
+	strcpy(newtree->state, state);
+	strcpy(newtree->moves, moves);
+	
+    return newtree;
 }
 
 /**
@@ -271,6 +279,13 @@ MoveTree * MoveTree_create(const char * state, const char * moves)
  */
 void MoveTree_destroy(MoveTree * node)
 {
+    if(node == NULL)
+	{
+		return;
+	}
+    MoveTree_destroy(node -> left);
+    MoveTree_destroy(node -> right);
+    free(node);
     
 }
 
@@ -283,7 +298,36 @@ void MoveTree_destroy(MoveTree * node)
 MoveTree * MoveTree_insert(MoveTree * node, const char * state,
 			   const char * moves)
 {
-    return NULL;
+    if(node == NULL)
+	{
+		return MoveTree_create(state, moves);
+	}
+    if(strcmp(state, node -> state) < 0)
+	{
+		node -> left = MoveTree_insert(node -> left, state, moves);
+    }
+    if(strcmp(state, node -> state) > 0)
+	{
+		node -> right = MoveTree_insert(node -> right, state, moves);
+    }
+	// if(value > node -> value)
+	// {
+		// node -> right = Tree_insert(node -> right, value);
+    // }
+	if(strcmp(state, node -> state) == 0)
+	{
+		if(strlen(moves) < strlen(node->moves))
+		{
+			free(node->moves);
+			node->moves = malloc(sizeof(char) * (strlen(moves) + 1)) ;
+			strcpy(node->moves, moves);
+		}
+			
+	}
+	// If they're equal, then we have nothing to do...
+	
+    return node;
+    //return NULL;
 }
 
 /**
@@ -292,7 +336,23 @@ MoveTree * MoveTree_insert(MoveTree * node, const char * state,
  */
 MoveTree * MoveTree_find(MoveTree * node, const char * state)
 {
-  
+	if(node == NULL)
+	{
+		return NULL;
+	}
+	if(strcmp(state, node->state) == 0)
+	{
+		return node;
+	}
+	
+	if(strcmp(state, node->state) < 0)
+	{
+		return MoveTree_find(node->left, state);
+	}
+	
+	return MoveTree_find(node->right, state);
+	
+	
 }
 
 /**
