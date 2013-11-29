@@ -10,7 +10,7 @@
 
 int compare(const void * a, const void * b);
 int searchdash(char * state);
-
+void generateAllHelper(MoveTree * root, int n_moves, const char * state, char * movelist, int ind) ;
 /**
             IMPORTANT INFORMATION
   
@@ -418,7 +418,26 @@ void MoveTree_print(MoveTree * node)
  */
 MoveTree * generateAll(char * state, int n_moves)
 { 
-    return NULL;
+	char* movelist = malloc(sizeof(char) * (n_moves + 1));
+	MoveTree *root = MoveTree_create(state, movelist);
+	generateAllhelper(root, n_moves, state, movelist, 0);
+    return root;
+}
+void generateAllHelper(MoveTree * root, int n_moves, const char * state, char * movelist, int ind)   
+{
+	if(move == n_moves)
+	{
+		return;
+	}
+	
+	char* dup_state = malloc(sizeof(char) * (strlen(state) + 1));
+	strcpy(dup_state, state);
+	if(move(dup_state, m) == TRUE)
+	{
+		MoveTree_insert(root, dup_state, movelist);
+		generateAllhelper(root, n_moves, dup_state, movelist, ind + 1);
+	}
+	
 }
 
 /**
@@ -430,7 +449,14 @@ MoveTree * generateAll(char * state, int n_moves)
  */
 char * solve(char * state)
 {
-    return NULL;
+	MoveTree* root = generateAll(state, MAX_SEARCH_DEPTH);
+	MoveTree* pos = MoveTree_find(root, FINAL_STATE);
+	if(pos == NULL)
+	{
+		return NULL;
+	)
+	
+    return pos->moves;
 }
 
 int main(int argc, char * * argv)
